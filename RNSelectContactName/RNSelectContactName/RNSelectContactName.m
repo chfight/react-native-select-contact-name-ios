@@ -140,11 +140,21 @@ RCT_EXPORT_METHOD(selectName:(BOOL *)boolType
         returnMiddleName = @"";
     }
 
+    NSString *phoneNumber = nil;
+    
+    // get the phone
+    if (ABRecordCopyValue(person, kABPersonPhoneProperty)) {
+        ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
+        CFStringRef phoneID = ABMultiValueCopyValueAtIndex(phone, 0);
+        phoneNumber = (__bridge_transfer NSString *)phoneID;
+    }
+    
     // Set the return dictionary
     NSDictionary *resultsDict = @{
                                   @"firstName" : returnFirstName,
                                   @"middleName" : returnMiddleName,
                                   @"lastName" : returnLastName,
+                                  @"phoneNumber":phoneNumber
                                   };
 
 
